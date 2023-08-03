@@ -1,0 +1,57 @@
+/*Query 1 - Top 10 Genres by Song */
+SELECT 
+  g.Name,
+  COUNT(t.Name) AS Songs
+FROM Genre g
+JOIN Track t
+  ON g.GenreId = t.GenreId
+GROUP BY g.Name
+ORDER BY Songs DESC
+LIMIT 10;
+
+
+/*Query 2 - 4 Genres With the Highest Revenue */
+SELECT
+  g.Name AS Genre,
+  SUM(i.UnitPrice*i.Quantity) AS TotalRevenue
+FROM Genre g
+JOIN Track t
+  ON g.GenreId = t.GenreId
+JOIN InvoiceLine i
+  ON t.TrackId = i.TrackId
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 4;
+
+
+/* Query 3 - 5 Metal bands with the most songs */
+SELECT
+  a.Name,
+  COUNT(t.TrackId) AS Songs
+FROM Artist a
+JOIN Album l
+  ON a.ArtistId = l.ArtistId
+JOIN Track t
+  ON l.AlbumId = t.AlbumId
+JOIN Genre g
+  ON t.GenreId = g.GenreId
+WHERE g.Name = 'Metal'
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 5;
+
+
+/* Query 4 - Employee Average Invoice Totals */
+SELECT
+  e.LastName,
+  e.FirstName,
+  AVG(i.total) AS AverageTotal
+FROM Employee e
+JOIN Customer c
+  ON e.EmployeeId = c.SupportRepId
+JOIN Invoice i
+  ON c.CustomerId = i.CustomerId
+GROUP BY 
+  e.LastName,
+  e.FirstName
+ORDER BY AverageTotal DESC;
